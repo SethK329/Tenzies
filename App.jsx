@@ -7,27 +7,25 @@ import Confetti from "react-confetti"
 export default function App() {
 
     const [dice, setDice] = React.useState(allNewDice())
-    const [tenzies, setTenzies] = React.useState(false)
     const [rolls, setRolls]= React.useState(0)
     const [timer, setTimer]= React.useState(0)
-    const [highscores, setHighScores] = React.useState({lowestRolls:{rolls:50, time:150},
-                                                        lowestTime:{time:150, rolls:50}})
-    const[newHighScore, setNewHighScore]= React.useState(false)                                                   
+    const [timerId, setTimerId] =  React.useState(setTime)
 
-    React.useEffect(() => {
-        const allHeld = dice.every(die => die.isHeld)
-        const firstValue = dice[0].value
-        const allSameValue = dice.every(die => die.value === firstValue)
-        if (allHeld && allSameValue) {
-            setTenzies(true)
-        }
-    }, [dice])
+    const allHeld = dice.every(die => die.isHeld)
+    const firstValue = dice[0].value
+    const allSameValue = dice.every(die => die.value === firstValue)
+    const tenzies = allHeld && allSameValue
 
-    React.useEffect(()=>{
-        const elapsedTime = setInterval(()=>{setTimer(prevTime=> prevTime+1)},1000);
-        if(tenzies) clearInterval(elapsedTime);
-        return ()=>{clearInterval(elapsedTime)}
-    }, [tenzies])
+
+console.log(tenzies)
+
+    function setTime() {
+        return setInterval(()=>{setTimer(prevTime=> prevTime+1)},1000)
+    }
+
+    if(tenzies){
+        clearInterval(timerId)
+    }
 
     function generateNewDie() {
         return {
@@ -54,10 +52,10 @@ export default function App() {
             }))
             setRolls(prevRolls => prevRolls= prevRolls+1)
         } else {
+            setTimerId(setTime)
             setRolls(0)
             setTimer(0)
             setDice(allNewDice())
-            setTenzies(false)
         }
     }
 
