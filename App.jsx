@@ -10,7 +10,9 @@ export default function App() {
     const [tenzies, setTenzies] = React.useState(false)
     const [rolls, setRolls]= React.useState(0)
     const [timer, setTimer]= React.useState(0)
-
+    const [highscores, setHighScores] = React.useState({lowestRolls:{rolls:50, time:150},
+                                                        lowestTime:{time:150, rolls:50}})
+    const[newHighScore, setNewHighScore]= React.useState(false)                                                   
 
     React.useEffect(() => {
         const allHeld = dice.every(die => die.isHeld)
@@ -21,15 +23,10 @@ export default function App() {
         }
     }, [dice])
 
-console.log(tenzies)
-
     React.useEffect(()=>{
         const elapsedTime = setInterval(()=>{setTimer(prevTime=> prevTime+1)},1000);
-        if(tenzies){
-        clearInterval(elapsedTime)
-        }
-        return ()=>{
-            clearInterval(elapsedTime)}
+        if(tenzies) clearInterval(elapsedTime);
+        return ()=>{clearInterval(elapsedTime)}
     }, [tenzies])
 
     function generateNewDie() {
@@ -88,7 +85,8 @@ console.log(tenzies)
             <p className="instructions">Roll until all dice are the same. 
             Click each die to freeze it at its current value between rolls.</p>
             <Score rolls={rolls}
-                   timer={timer}         
+                   timer={timer}
+                   highscores={highscores}         
             />
             <div className="dice-container">
                 {diceElements}

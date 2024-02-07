@@ -41,6 +41,10 @@ main {
     justify-content: space-around;
 }
 
+.highscores, .score{
+    min-width: 50px;
+}
+
 
 .dice-container {
     display: grid;
