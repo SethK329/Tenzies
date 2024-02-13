@@ -11,13 +11,11 @@ export default function App() {
     const [timer, setTimer]= React.useState(0)
     const [timerId, setTimerId] =  React.useState(setTime)
 
+
     const allHeld = dice.every(die => die.isHeld)
     const firstValue = dice[0].value
     const allSameValue = dice.every(die => die.value === firstValue)
     const tenzies = allHeld && allSameValue
-
-
-console.log(tenzies)
 
     function setTime() {
         return setInterval(()=>{setTimer(prevTime=> prevTime+1)},1000)
@@ -66,7 +64,9 @@ console.log(tenzies)
                 die
         }))
     }
-    
+
+
+
     const diceElements = dice.map(die => (
         <Die 
             key={die.id} 
@@ -84,7 +84,7 @@ console.log(tenzies)
             Click each die to freeze it at its current value between rolls.</p>
             <Score rolls={rolls}
                    timer={timer}
-                   highscores={highscores}         
+                   tenzies={tenzies}   
             />
             <div className="dice-container">
                 {diceElements}

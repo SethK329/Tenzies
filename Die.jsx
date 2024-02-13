@@ -6,7 +6,7 @@ export default function Die(props) {
     }
     return (
         <div 
-            className="die-face" 
+            className={!props.isHeld ? "die-rolling die-face" : "die-face"} 
             style={styles}
             onClick={props.holdDice}
         >
