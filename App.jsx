@@ -86,7 +86,9 @@ export default function App() {
                    timer={timer}
                    tenzies={tenzies}   
             />
-            <div className="dice-container">
+            <div className="dice-container"
+                 aria-live="polite"
+            >
                 {diceElements}
             </div>
             <button 
