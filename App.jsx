@@ -58,6 +58,7 @@ export default function App() {
     }
 
     function holdDice(id) {
+        speakDiceValue(id)
         setDice(oldDice => oldDice.map(die => {
             return die.id === id ? 
                 {...die, isHeld: !die.isHeld} :
@@ -65,7 +66,12 @@ export default function App() {
         }))
     }
 
-
+    function speakDiceValue(id){
+        const synth = window.speechSynthesis
+        const value = dice.find(die => die.id === id).value
+        const utterance = new SpeechSynthesisUtterance(value)
+        synth.speak(utterance)
+    }
 
     const diceElements = dice.map(die => (
         <Die 
