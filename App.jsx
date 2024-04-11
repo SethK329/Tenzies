@@ -27,7 +27,7 @@ export default function App() {
 
     function generateNewDie() {
         return {
-            value: Math.ceil(Math.random() * 6),
+            value: Math.floor(Math.random() * 10),
             isHeld: false,
             id: nanoid()
         }
