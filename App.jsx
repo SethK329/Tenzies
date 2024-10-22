@@ -1,15 +1,16 @@
 import React, { useRef } from "react"
 import Die from "./Die"
 import Score from "./Score"
+import Options from "./Options"
 import {nanoid} from "nanoid"
 import Confetti from "react-confetti"
 
 export default function App() {
 
-    const [dice, setDice] = React.useState(allNewDice())
+    const [charSet, setCharSet]= React.useState("numbers")
+    const [dice, setDice] = React.useState(allNewDice(charSet))
     const [rolls, setRolls]= React.useState(0)
-    const [timer, setTimer]= React.useState(0)
-    const [timerId, setTimerId] =  React.useState(setTime)
+    const [gameStart, setGameStart]= React.useState(false)
 
 
     const allHeld = dice.every(die => die.isHeld)
@@ -17,47 +18,64 @@ export default function App() {
     const allSameValue = dice.every(die => die.value === firstValue)
     const tenzies = allHeld && allSameValue
 
-    function setTime() {
-        return setInterval(()=>{setTimer(prevTime=> prevTime+1)},1000)
+
+
+    if(tenzies && gameStart){
+        setGameStart(false)
     }
 
-    if(tenzies){
-        clearInterval(timerId)
+    function chooseCharSet(selection){
+        console.log(selection)
+        setCharSet(selection)
+        setDice(allNewDice(selection))
     }
 
-    function generateNewDie() {
+    function generateNewDie(selection) {
+        if(selection === "numbers"){
         return {
             value: Math.floor(Math.random() * 10),
             isHeld: false,
             id: nanoid()
         }
+    } else if(selection === "letters"){
+        return {
+            value: String.fromCharCode(Math.floor(Math.random() * 26) + 65),
+            isHeld: false,
+            id: nanoid()
+        }
+    }
     }
 
-    function allNewDice() {
+    function allNewDice(selection) {
         const newDice = []
         for (let i = 0; i < 10; i++) {
-            newDice.push(generateNewDie())
+            newDice.push(generateNewDie(selection))
         }
         return newDice
     }
     
     function rollDice() {
+        if(!gameStart){
+            // start the timer
+            setGameStart(true)
+        }
         if(!tenzies) {
             setDice(oldDice => oldDice.map(die => {
                 return die.isHeld ? 
                     die :
-                    generateNewDie()
+                    generateNewDie(charSet)
             }))
             setRolls(prevRolls => prevRolls= prevRolls+1)
         } else {
-            setTimerId(setTime)
-            setRolls(0)
-            setTimer(0)
-            setDice(allNewDice())
+            resetGame()
         }
     }
 
     function holdDice(id) {
+        if(!gameStart){
+            // start the timer
+            setGameStart(true)
+        }
         speakDiceValue(id)
         setDice(oldDice => oldDice.map(die => {
             return die.id === id ? 
@@ -73,6 +91,13 @@ export default function App() {
         synth.speak(utterance)
     }
 
+    
+    function resetGame(){
+        setRolls(0)
+        setTimer(0)
+        setDice(allNewDice())
+    }
+
     const diceElements = dice.map(die => (
         <Die 
             key={die.id} 
@@ -85,21 +110,23 @@ export default function App() {
     return (
         <main>
             {tenzies && <Confetti />}
-            <h1 className="title">Tenzies</h1>
-            <p className="instructions">Roll until all dice are the same. 
+            <h1 className = "title" >Tenzies</h1>
+            <p className = "instructions" >Roll until all dice are the same. 
             Click each die to freeze it at its current value between rolls.</p>
-            <Score rolls={rolls}
-                   timer={timer}
-                   tenzies={tenzies}   
+            <Options chooseCharSet = {chooseCharSet}
+                     gameStart = {gameStart} />
+            <Score rolls = {rolls}
+                   tenzies = {tenzies}
+                   gameStart = {gameStart}   
             />
-            <div className="dice-container"
-                 aria-live="polite"
+            <div className = "dice-container"
+                 aria-live = "polite"
             >
                 {diceElements}
             </div>
             <button 
-                className="roll-dice" 
-                onClick={rollDice}
+                className = "button" 
+                onClick = {rollDice}
             >
                 {tenzies ? "New Game" : "Roll"}
             </button>
