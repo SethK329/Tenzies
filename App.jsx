@@ -8,6 +8,7 @@ import Confetti from "react-confetti"
 export default function App() {
 
     const [charSet, setCharSet]= React.useState("numbers")
+    const [charList, setCharList]= React.useState(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"])
     const [dice, setDice] = React.useState(allNewDice(charSet))
     const [rolls, setRolls]= React.useState(0)
     const [gameStart, setGameStart]= React.useState(false)
@@ -18,32 +19,34 @@ export default function App() {
     const allSameValue = dice.every(die => die.value === firstValue)
     const tenzies = allHeld && allSameValue
 
-
-
     if(tenzies && gameStart){
         setGameStart(false)
     }
+  
 
     function chooseCharSet(selection){
-        console.log(selection)
         setCharSet(selection)
-        setDice(allNewDice(selection))
+        if(selection === "numbers"){
+            setCharList(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"])
+        } else if(selection === "letters"){
+            let chars = []
+            for(let i = 0; i < 10; i++){
+                let char = String.fromCharCode(Math.floor(Math.random() * 26) + 65)
+                chars.push(char)
+            }
+            setCharList(chars)
+        }
+        resetGame()
     }
+    React.useEffect(()=>setDice(allNewDice(charSet)),[charSet])
 
     function generateNewDie(selection) {
-        if(selection === "numbers"){
         return {
-            value: Math.floor(Math.random() * 10),
+            value: charList[Math.floor(Math.random() * 10)],
             isHeld: false,
             id: nanoid()
         }
-    } else if(selection === "letters"){
-        return {
-            value: String.fromCharCode(Math.floor(Math.random() * 26) + 65),
-            isHeld: false,
-            id: nanoid()
-        }
-    }
+   
     }
 
     function allNewDice(selection) {
@@ -71,17 +74,24 @@ export default function App() {
         }
     }
 
+    function resetGame(){
+        setRolls(0)
+        setDice(allNewDice())
+    }
+
     function holdDice(id) {
         if(!gameStart){
             // start the timer
             setGameStart(true)
         }
-        speakDiceValue(id)
-        setDice(oldDice => oldDice.map(die => {
-            return die.id === id ? 
-                {...die, isHeld: !die.isHeld} :
-                die
-        }))
+        if(!tenzies){
+            speakDiceValue(id)
+            setDice(oldDice => oldDice.map(die => {
+                return die.id === id ? 
+                    {...die, isHeld: !die.isHeld} :
+                    die
+            }))     
+        }
     }
 
     function speakDiceValue(id){
@@ -92,11 +102,6 @@ export default function App() {
     }
 
     
-    function resetGame(){
-        setRolls(0)
-        setTimer(0)
-        setDice(allNewDice())
-    }
 
     const diceElements = dice.map(die => (
         <Die 
@@ -104,6 +109,7 @@ export default function App() {
             value={die.value} 
             isHeld={die.isHeld} 
             holdDice={() => holdDice(die.id)}
+            tenzies = {tenzies}
         />
     ))
     

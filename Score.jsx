@@ -38,7 +38,7 @@ if(props.tenzies){
 React.useEffect(()=>{   
     if(props.rolls===0){
         setNewHighScores({timer:false, rolls:false})
-        
+        setTimer(0)
     }    
 },[props.tenzies])
 
