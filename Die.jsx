@@ -8,7 +8,7 @@ export default function Die(props) {
         <div 
             className={!props.isHeld ? "die-rolling die-face" : "die-face"} 
             style={styles}
-            onClick={ props.holdDice}
+            onClick={props.holdDice}
         >
             <h2 className="die-num">{props.value}</h2>
         </div>
