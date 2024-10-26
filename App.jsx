@@ -31,7 +31,8 @@ export default function App() {
         } else if(selection === "letters"){
             let chars = []
             for(let i = 0; i < 10; i++){
-                let char = String.fromCharCode(Math.floor(Math.random() * 26) + 65)
+                let char = String.fromCharCode(Math.floor(Math.random() * 26) + 65).toLowerCase()
+                console.log(char)
                 chars.push(char)
             }
             setCharList(chars)
