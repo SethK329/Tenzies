@@ -2,7 +2,7 @@ import React from "react"
 
 export default function Score(props){
     const [highscores, setHighscores] = React.useState(JSON.parse(localStorage.getItem('highscores')) || {timer:150, rolls:50})
-    const [newHighScores, setNewHighScores] = React.useState({timer:false, rolls:false})
+    const [newHighScores, setNewHighScores] = React.useState({newTimer:false, newRolls:false})
     const [timer, setTimer]= React.useState(0)
 
 function checkHighscore() {
@@ -14,19 +14,19 @@ function checkHighscore() {
             // save highscores in local storage
             setNewHighScores(prevNewHighScores => ({
                 ...prevNewHighScores,
-                rolls: true
+                NewRolls: true
             }))
         }
     
-        if (props.timer < highscores.timer) {
+        if (timer < highscores.timer) {
             setHighscores(prevHighscores => ({
                 ...prevHighscores,
-                timer: props.timer
+                timer: timer
             }));
             // save highscores in local storage
             setNewHighScores(prevNewHighScores => ({
                 ...prevNewHighScores,
-                timer: true
+                newTimer: true
             }))
         }
         localStorage.setItem('highscores', JSON.stringify(highscores));
