@@ -7,11 +7,11 @@ export default function Options(props) {
         <div className="options">
             <div>
                 <label htmlFor="letters">Letters</label>
-                <button disabled={letters} id="letters" className={letters ? "button disabled" : "button"} onClick={()=>props.chooseCharSet("letters")}>A B C</button>
+                <button id="letters" className={letters ? "button" : "button"} onClick={()=>props.chooseCharSet("letters")}>A B C</button>
             </div>
             <div>  
                 <label htmlFor="numbers">Numbers</label>
-                <button disabled={numbers} id="numbers" className={numbers? "button disabled" : "button"} onClick={()=>props.chooseCharSet("numbers")}>1 2 3</button>
+                <button id="numbers" className={numbers? "button" : "button"} onClick={()=>props.chooseCharSet("numbers")}>1 2 3</button>
             </div>
         </div>
     )

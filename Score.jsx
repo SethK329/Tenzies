@@ -40,7 +40,7 @@ React.useEffect(()=>{
         setNewHighScores({timer:false, rolls:false})
         setTimer(0)
     }    
-},[props.tenzies])
+},[props.tenzies, props.charSet])
 
 React.useEffect(()=>{
     const timerId = setInterval(()=>{setTimer(prevTime=> prevTime+1)},1000)    

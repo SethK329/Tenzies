@@ -12,7 +12,7 @@ export default function App() {
     const [dice, setDice] = React.useState(allNewDice(charSet))
     const [rolls, setRolls]= React.useState(0)
     const [gameStart, setGameStart]= React.useState(false)
-
+    const [resetTrigger, setResetTrigger] = React.useState(false)
 
     const allHeld = dice.every(die => die.isHeld)
     const firstValue = dice[0].value
@@ -32,13 +32,11 @@ export default function App() {
             let chars = []
             for(let i = 0; i < 10; i++){
                 let char = String.fromCharCode(Math.floor(Math.random() * 26) + 65).toLowerCase()
-                console.log(char)
                 chars.push(char)
             }
             setCharList(chars)
         }
         resetGame()
-        console.log(charList)
     }
     React.useEffect(()=>setDice(allNewDice(charSet)),[charSet])
 
@@ -79,6 +77,7 @@ export default function App() {
     function resetGame(){
         setRolls(0)
         setDice(allNewDice())
+        setResetTrigger(true)
     }
 
     function holdDice(id) {
@@ -126,7 +125,8 @@ export default function App() {
                      gameStart = {gameStart} />
             <Score rolls = {rolls}
                    tenzies = {tenzies}
-                   gameStart = {gameStart}   
+                   gameStart = {gameStart}  
+                   charSet = {charSet}
             />
             <div className = "dice-container"
                  aria-live = "polite"
